@@ -1,0 +1,9 @@
+language: java
+jdk:
+  - oraclejdk8
+notifications:
+  email:
+    recipients:
+      - Tech-EBSGIT-CICD-Team@intuit.com
+      - evan_hang@intuit.com
+      - shan_anwar@intuit.com

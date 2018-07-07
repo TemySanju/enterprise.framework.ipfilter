@@ -1,0 +1,31 @@
+#!/bin/bash -e
+# "builder-id": "42244792-860e-4400-80d8-1d31094bcfe3",
+ 
+# For CI build only (no CD) comment out the following line.
+#CI_AND_CD='-P cicd'
+
+# pick up the proper version of the sample app configuration 
+# sample app configuration is published from another repo.
+[ -f '.config_version' ] && export CONFIG_VERSION=`cat .config_version`
+
+# sample app uses git SHA for version - Not applicable if using a different versioning policy
+COMMIT=$(git rev-parse HEAD)
+APP_VERSION=$COMMIT
+
+#update pom version with Git SHA - Not applicable if using a different versioning policy
+pom_with_version=.pom.xml.ver
+sed "s/#RELEASE_VERSION#/${APP_VERSION}/g" < pom.xml > $pom_with_version
+
+# Publish to nexus only if CICD Service (Jenkins) build
+if [ ! -z "$BUILD_ID" ]; then
+  MVN_TARGETS="clean deploy -Dmaven.test.skip=false"
+else
+  MVN_TARGETS="clean install"
+fi
+
+# build and publish to nexus app artifact (CI Build)
+# build and publish to nexus deployable artifact (CI_AND_CD build)
+mvn -f $pom_with_version $CI_AND_CD -s settings.xml $MVN_TARGETS 
+
+#cleanup
+[ -f "$pom_with_version" ] && rm -f $pom_with_version
