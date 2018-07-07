@@ -13,8 +13,10 @@
         <!-- JaCoCo Overrides -->
         <jacoco.enabled>false</jacoco.enabled> <!-- When false, JaCoCo is disable entirely -->
         <jacoco.covered.ratio.min>.85</jacoco.covered.ratio.min> <!-- Override default 80% (.80) code coverage limit to 50% (.50) -->
-        <jacoco.missed.count.max>1</jacoco.missed.count.max> <!-- Allows 1 class not be JUnit tested -->
+        <jacoco.missed.count.max>1</jacoco.missed.count.max>
+         <maven.test.skip>true</maven.test.skip> <!-- Allows 1 class not be JUnit tested -->
     </properties>
+   
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
